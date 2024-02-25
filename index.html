@@ -167,20 +167,14 @@
 
 		scene = new THREE.Scene();
 
-		if (count >= 1) {
-			console.error("prevYoutubeIframe assigned" + count);
-			prevYoutubeIframe = function (id, videoIdArrayJSON, listType, listId, autoplay, loop, shuffle, width, height, x, y, z, ry) {
-				new YoutubeObject(id, videoIdArrayJSON, listType, listId, autoplay, loop, shuffle, width, height, x, y, z, ry);
-			}
-        }
-
 		if (prevYoutubeIframe != null && count > 1) {
             console.error("Remove Iframe called" + prevYoutubeIframe);
             removeYoutubeIframe = scene.remove(prevYoutubeIframe);
         }
 
 		addYoutubeIframe = function (id, videoIdArrayJSON, listType, listId, autoplay, loop, shuffle, width, height, x, y, z, ry) {
-			scene.add(new YoutubeObject(id, videoIdArrayJSON, listType, listId, autoplay, loop, shuffle, width, height, x, y, z, ry));
+			prevYoutubeIframe = new YoutubeObject(id, videoIdArrayJSON, listType, listId, autoplay, loop, shuffle, width, height, x, y, z, ry);
+			scene.add(prevYoutubeIframe);
             console.error("Iframe added" + id);
 		}
 		camera = new THREE.PerspectiveCamera(60, 960 / 600, .1, 10000);
