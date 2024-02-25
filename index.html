@@ -142,7 +142,12 @@
 
 		function deletePreviousIframe() {
 			console.error(count);
-            count++;
+			count++;
+
+            if (prevYoutubeIframe != null && count > 1) {
+                console.error("Remove Iframe called" + prevYoutubeIframe);
+                removeYoutubeIframe = scene.remove(prevYoutubeIframe);
+            }
         }
     </script>
 
@@ -166,11 +171,6 @@
 		import { CSS3DRenderer, CSS3DObject } from 'three/CSS3DRenderer';
 
 		scene = new THREE.Scene();
-
-		if (prevYoutubeIframe != null && count > 1) {
-            console.error("Remove Iframe called" + prevYoutubeIframe);
-            removeYoutubeIframe = scene.remove(prevYoutubeIframe);
-        }
 
 		addYoutubeIframe = function (id, videoIdArrayJSON, listType, listId, autoplay, loop, shuffle, width, height, x, y, z, ry) {
 			prevYoutubeIframe = new YoutubeObject(id, videoIdArrayJSON, listType, listId, autoplay, loop, shuffle, width, height, x, y, z, ry);
