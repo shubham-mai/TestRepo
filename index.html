@@ -87,7 +87,7 @@
 
 		function onPlayerReady(event) {
 			if (! event.target.getIframe().shuffle) { // this avoids setting the title to the first video in the playlist before shuffling
-				//setTitle(event.target.getIframe().id, event.target.getIframe().title);
+				setTitle(event.target.getIframe().id, event.target.getIframe().title);
 			}
 			event.target.setShuffle(event.target.getIframe().shuffle);
 
@@ -99,7 +99,7 @@
 
 		function onPlayerStateChange(event) {
 			if (event.data == YT.PlayerState.PLAYING) {
-				//setTitle(event.target.getIframe().id, event.target.getIframe().title);
+				setTitle(event.target.getIframe().id, event.target.getIframe().title);
 			}
 		}
 
@@ -107,13 +107,13 @@
 			console.log("youtube error: " + event.data + " + iframe: " + event.target.getIframe().id);
 			if (event.data == "150") {
 				console.log("video can't be embedded: iframe: " + event.target.getIframe().id + " title: " + event.target.getIframe().title);
-				//setTitle(event.target.getIframe().id, event.target.getIframe().title);
+				setTitle(event.target.getIframe().id, event.target.getIframe().title);
 			}
 		}
 
-		//function setTitle(iframeId, title) {
-			//unityGameInstance.SendMessage("YoutubeManager", "SetTitle", JSON.stringify([iframeId, title]));
-		//}
+		function setTitle(iframeId, title) {
+			unityGameInstance.SendMessage("YoutubeManager", "SetTitle", JSON.stringify([iframeId, title]));
+		}
 
 		function handlePlayerClick(iframeId) {
 			var player = document.getElementById(iframeId).player;
