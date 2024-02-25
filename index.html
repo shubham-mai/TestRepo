@@ -72,6 +72,7 @@
 
 		function onYouTubeIframeAPIReady() {
 			youtubeIframes.forEach((iframe) => {
+                console.error(iframe);
 				var youtubePlayer = new YT.Player(iframe.id, {
 					events: {
 						'onReady': onPlayerReady,
@@ -165,7 +166,7 @@
 
 		scene = new THREE.Scene();
 
-        if (count == 1) {
+        if (count >= 1) {
 			prevYoutubeIframe = function (id, videoIdArrayJSON, listType, listId, autoplay, loop, shuffle, width, height, x, y, z, ry) {
 				new YoutubeObject(id, videoIdArrayJSON, listType, listId, autoplay, loop, shuffle, width, height, x, y, z, ry);
 			}
