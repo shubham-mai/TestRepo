@@ -31,7 +31,10 @@
 		var cameraRotationEuler;
 		var unityGameInstance;
 		var scene;
-    	var addYoutubeIframe;
+		var addYoutubeIframe;
+		var removeYoutubeIframe; 
+		var prevYoutubeIframe = null;
+		var count = 0;
 		var youtubeIframes = [];
 		var youtubePlayers = [];
 		const unityToThreeScale = 100;
@@ -108,9 +111,9 @@
 			}
 		}
 
-		function setTitle(iframeId, title) {
-			unityGameInstance.SendMessage("YoutubeManager", "SetTitle", JSON.stringify([iframeId, title]));
-		}
+		//function setTitle(iframeId, title) {
+			//unityGameInstance.SendMessage("YoutubeManager", "SetTitle", JSON.stringify([iframeId, title]));
+		//}
 
 		function handlePlayerClick(iframeId) {
 			var player = document.getElementById(iframeId).player;
@@ -135,6 +138,10 @@
 		function handlePreviousButtonClick(iframeId) {
 			document.getElementById(iframeId).player.previousVideo();
 		}
+
+		function deletePreviousIframe() {
+            count++;
+        }
     </script>
 
 	<!-- Import maps polyfill -->
@@ -157,10 +164,20 @@
 		import { CSS3DRenderer, CSS3DObject } from 'three/CSS3DRenderer';
 
 		scene = new THREE.Scene();
-		addYoutubeIframe = function(id, videoIdArrayJSON, listType, listId, autoplay, loop, shuffle, width, height, x, y, z, ry) {
-			scene.add( new YoutubeObject(id, videoIdArrayJSON, listType, listId, autoplay, loop, shuffle, width, height, x, y, z, ry) );
-		}
 
+        if (count == 1) {
+			prevYoutubeIframe = function (id, videoIdArrayJSON, listType, listId, autoplay, loop, shuffle, width, height, x, y, z, ry) {
+				new YoutubeObject(id, videoIdArrayJSON, listType, listId, autoplay, loop, shuffle, width, height, x, y, z, ry);
+			}
+        }
+
+        if (prevYoutubeIframe != null && count > 1) {
+            removeYoutubeIframe = scene.remove(prevYoutubeIframe);
+        }
+
+		addYoutubeIframe = function (id, videoIdArrayJSON, listType, listId, autoplay, loop, shuffle, width, height, x, y, z, ry) {
+			scene.add(new YoutubeObject(id, videoIdArrayJSON, listType, listId, autoplay, loop, shuffle, width, height, x, y, z, ry));
+		}
 		camera = new THREE.PerspectiveCamera(60, 960 / 600, .1, 10000);
 		cameraPositionVector = new THREE.Vector3();
 		cameraRotationQuaternion = new THREE.Quaternion();
