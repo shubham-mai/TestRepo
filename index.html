@@ -145,6 +145,7 @@
 			console.log("Called");
 			document.getElementById(iframeId).player.pauseVideo();
 			document.getElementById(iframeId).player.loadVideoById(videoId);
+			document.getElementById(iframeId).player.pauseVideo();
         }
     </script>
 
@@ -267,6 +268,7 @@
 				youtubePlayers.forEach((player) => {
 					if (player.setVolume) {
 						player.setVolume(100 - (camera.position.distanceTo(player.getIframe().threeObject.position) / 10));
+                        console.log(player.getVolume());
 					}				
 				});
 			}
