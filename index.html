@@ -34,6 +34,7 @@
 		var addYoutubeIframe;
 		var removeYoutubeIframe; 
 		var prevYoutubeIframe = null;
+        var nextYoutubeIframe = null;
 		var count = 0;
 		var youtubeIframes = [];
 		var youtubePlayers = [];
@@ -140,14 +141,10 @@
 			document.getElementById(iframeId).player.previousVideo();
 		}
 
-		function deletePreviousIframe() {
-			console.error(count);
-			count++;
-
-            if (prevYoutubeIframe != null && count > 1) {
-                console.error("Remove Iframe called" + prevYoutubeIframe.id);
-                removeYoutubeIframe = scene.remove(prevYoutubeIframe);
-            }
+		function deletePreviousIframe(iframeId, videoId) {
+			console.log("Called");
+			document.getElementById(iframeId).player.pauseVideo();
+			document.getElementById(iframeId).player.loadVideoById(videoId);
         }
     </script>
 
@@ -173,9 +170,8 @@
 		scene = new THREE.Scene();
 
 		addYoutubeIframe = function (id, videoIdArrayJSON, listType, listId, autoplay, loop, shuffle, width, height, x, y, z, ry) {
-			prevYoutubeIframe = new YoutubeObject(id, videoIdArrayJSON, listType, listId, autoplay, loop, shuffle, width, height, x, y, z, ry);
-			scene.add(prevYoutubeIframe);
-            console.error("Iframe added" + id);
+			nextYoutubeIframe = new YoutubeObject(id, videoIdArrayJSON, listType, listId, autoplay, loop, shuffle, width, height, x, y, z, ry);
+			scene.add(nextYoutubeIframe);
 		}
 		camera = new THREE.PerspectiveCamera(60, 960 / 600, .1, 10000);
 		cameraPositionVector = new THREE.Vector3();
