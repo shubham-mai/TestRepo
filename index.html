@@ -242,7 +242,8 @@
 			requestAnimationFrame(animate);
 
 			if (unityGameInstance) {
-                unityGameInstance.SendMessage('PlayerCapsule', 'ProcessInput');
+                unityGameInstance.SendMessage('Player', 'ProcessInput');
+                //unityGameInstance.SendMessage('PlayerCapsule', 'ProcessInput');
 			}
 
 			camera.position.set(cameraPositionVector.x * unityToThreeScale, 
