@@ -68,12 +68,11 @@
         	var tag = document.createElement('script');
         	tag.src = "https://www.youtube.com/iframe_api";
         	var firstScriptTag = document.getElementsByTagName('script')[0];
-        	firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+			firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
       	}
 
 		function onYouTubeIframeAPIReady() {
 			youtubeIframes.forEach((iframe) => {
-                console.error(iframe);
 				var youtubePlayer = new YT.Player(iframe.id, {
 					events: {
 						'onReady': onPlayerReady,
@@ -106,9 +105,7 @@
 		}
 
 		function onPlayerError(event) {
-			console.log("youtube error: " + event.data + " + iframe: " + event.target.getIframe().id);
 			if (event.data == "150") {
-				console.log("video can't be embedded: iframe: " + event.target.getIframe().id + " title: " + event.target.getIframe().title);
 				setTitle(event.target.getIframe().id, event.target.getIframe().title);
 			}
 		}
@@ -142,7 +139,6 @@
 		}
 
 		function deletePreviousIframe(iframeId, videoId) {
-			console.log("Called");
 			document.getElementById(iframeId).player.pauseVideo();
 			document.getElementById(iframeId).player.loadVideoById(videoId);
 			document.getElementById(iframeId).player.pauseVideo();
@@ -220,7 +216,7 @@
 			object.rotation.y = ry;
 			iframe.threeObject = object;
 			
-			unityGameInstance.SendMessage('YoutubeManager', 'IframeCreated');
+			unityGameInstance.SendMessage('Floor', 'IframeCreated');
 			return object;
 		}
 
@@ -246,7 +242,7 @@
 			requestAnimationFrame(animate);
 
 			if (unityGameInstance) {
-				unityGameInstance.SendMessage('Player', 'ProcessInput');
+                unityGameInstance.SendMessage('PlayerCapsule', 'ProcessInput');
 			}
 
 			camera.position.set(cameraPositionVector.x * unityToThreeScale, 
@@ -268,7 +264,6 @@
 				youtubePlayers.forEach((player) => {
 					if (player.setVolume) {
 						player.setVolume(100 - (camera.position.distanceTo(player.getIframe().threeObject.position) / 10));
-                        console.log(player.getVolume());
 					}				
 				});
 			}
