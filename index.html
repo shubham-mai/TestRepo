@@ -31,11 +31,7 @@
 		var cameraRotationEuler;
 		var unityGameInstance;
 		var scene;
-		var addYoutubeIframe;
-		var removeYoutubeIframe; 
-		var prevYoutubeIframe = null;
-        var nextYoutubeIframe = null;
-		var count = 0;
+    	var addYoutubeIframe;
 		var youtubeIframes = [];
 		var youtubePlayers = [];
 		const unityToThreeScale = 100;
@@ -68,7 +64,7 @@
         	var tag = document.createElement('script');
         	tag.src = "https://www.youtube.com/iframe_api";
         	var firstScriptTag = document.getElementsByTagName('script')[0];
-			firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+        	firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
       	}
 
 		function onYouTubeIframeAPIReady() {
@@ -105,13 +101,16 @@
 		}
 
 		function onPlayerError(event) {
+			console.log("youtube error: " + event.data + " + iframe: " + event.target.getIframe().id);
 			if (event.data == "150") {
+				console.log("video can't be embedded: iframe: " + event.target.getIframe().id + " title: " + event.target.getIframe().title);
 				setTitle(event.target.getIframe().id, event.target.getIframe().title);
 			}
 		}
 
 		function setTitle(iframeId, title) {
-			unityGameInstance.SendMessage("YoutubeManager", "SetTitle", JSON.stringify([iframeId, title]));
+			console.error("Title " + title);
+			//unityGameInstance.SendMessage("YoutubeManager", "SetTitle", JSON.stringify([iframeId, title]));
 		}
 
 		function handlePlayerClick(iframeId) {
@@ -130,19 +129,13 @@
 			}
 		}
 
-		function handleNextButtonClick(iframeId) {
-			document.getElementById(iframeId).player.nextVideo();
-		}
+		//function handleNextButtonClick(iframeId) {
+			//document.getElementById(iframeId).player.nextVideo();
+		//}
 
-		function handlePreviousButtonClick(iframeId) {
-			document.getElementById(iframeId).player.previousVideo();
-		}
-
-		function deletePreviousIframe(iframeId, videoId) {
-			document.getElementById(iframeId).player.pauseVideo();
-			document.getElementById(iframeId).player.loadVideoById(videoId);
-			document.getElementById(iframeId).player.pauseVideo();
-        }
+		//function handlePreviousButtonClick(iframeId) {
+			//document.getElementById(iframeId).player.previousVideo();
+		//}
     </script>
 
 	<!-- Import maps polyfill -->
@@ -165,11 +158,10 @@
 		import { CSS3DRenderer, CSS3DObject } from 'three/CSS3DRenderer';
 
 		scene = new THREE.Scene();
-
-		addYoutubeIframe = function (id, videoIdArrayJSON, listType, listId, autoplay, loop, shuffle, width, height, x, y, z, ry) {
-			nextYoutubeIframe = new YoutubeObject(id, videoIdArrayJSON, listType, listId, autoplay, loop, shuffle, width, height, x, y, z, ry);
-			scene.add(nextYoutubeIframe);
+		addYoutubeIframe = function(id, videoIdArrayJSON, listType, listId, autoplay, loop, shuffle, width, height, x, y, z, ry) {
+			scene.add( new YoutubeObject(id, videoIdArrayJSON, listType, listId, autoplay, loop, shuffle, width, height, x, y, z, ry) );
 		}
+
 		camera = new THREE.PerspectiveCamera(60, 960 / 600, .1, 10000);
 		cameraPositionVector = new THREE.Vector3();
 		cameraRotationQuaternion = new THREE.Quaternion();
@@ -216,7 +208,7 @@
 			object.rotation.y = ry;
 			iframe.threeObject = object;
 			
-            unityGameInstance.SendMessage('YoutubeManager', 'IframeCreated');
+			unityGameInstance.SendMessage('YoutubeManager', 'IframeCreated');
 			return object;
 		}
 
@@ -242,8 +234,7 @@
 			requestAnimationFrame(animate);
 
 			if (unityGameInstance) {
-                unityGameInstance.SendMessage('Player', 'ProcessInput');
-                //unityGameInstance.SendMessage('PlayerCapsule', 'ProcessInput');
+				unityGameInstance.SendMessage('Player', 'ProcessInput');
 			}
 
 			camera.position.set(cameraPositionVector.x * unityToThreeScale, 
@@ -264,7 +255,8 @@
 			if (platform.product != "iPhone" && platform.product != "iPad") {
 				youtubePlayers.forEach((player) => {
 					if (player.setVolume) {
-						player.setVolume(100 - (camera.position.distanceTo(player.getIframe().threeObject.position) / 10));
+						player.setVolume(100);
+						console.error(player.getVolume());
 					}				
 				});
 			}
@@ -343,11 +335,11 @@
       }
 
       var buildUrl = "Build";
-      var loaderUrl = buildUrl + "/Test.loader.js";
+      var loaderUrl = buildUrl + "/fdgsd.loader.js";
       var config = {
-        dataUrl: buildUrl + "/Test.data",
-        frameworkUrl: buildUrl + "/Test.framework.js",
-        codeUrl: buildUrl + "/Test.wasm",
+        dataUrl: buildUrl + "/fdgsd.data",
+        frameworkUrl: buildUrl + "/fdgsd.framework.js",
+        codeUrl: buildUrl + "/fdgsd.wasm",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "DefaultCompany",
         productName: "webgl test",
